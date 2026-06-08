@@ -1,0 +1,164 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Founders Grotesk';
+}
+
+html,
+body {
+    height: 100%;
+    width: 100%;
+    background-color: var(--bg-color);
+    color: var(--txt-color);
+}
+
+:root {
+    --bg-color: black;
+    --txt-color: white;
+    --bg-btn-color: #1a1a1a;
+    --bg-task-color: #333333;
+    --del-btn-color: crimson;
+    --add-btn-color: limegreen;
+
+    /* padding */
+    --nav-padding: 15px 30px;
+    --section-padding: 15px 30px;
+    --pad-s: 5px;
+    --pad-m: 10px;
+    --pad-l: 15px;
+    --pad-xl: 20px;
+    --pad-xxl: 30px;
+
+    /* border-radius variables */
+    --radius-s: 5px;
+    --radius-m: 10px;
+    --radius-l: 15px;
+}
+
+main {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--nav-padding);
+    position: sticky;
+    top: 0;
+}
+
+nav button {
+    background-color: var(--bg-btn-color);
+    color: var(--txt-color);
+    border: none;
+    padding: var(--pad-s) var(--pad-m);
+    border-radius: var(--radius-s);
+    cursor: pointer;
+}
+
+section {
+    padding: var(--section-padding);
+    display: flex;
+    justify-content: space-between;
+    flex-grow: 1;
+    gap: var(--pad-l);
+}
+
+section .task-col.hover-over{
+    border: 2px dashed var(--txt-color);
+    scale: 1.04;
+}
+
+section .task-col {
+    width: 100%;
+    flex-grow: 1;
+    background: var(--bg-btn-color);
+    padding: var(--pad-m);
+    display: flex;
+    flex-direction: column;
+    gap: var(--pad-m);
+    border-radius: var(--radius-m);
+    transition: all 0.2s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+}
+
+section .task-col .heading {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: var(--pad-m);
+}
+
+section .task-col .task {
+    background-color: var(--bg-task-color);
+    padding: var(--pad-m);
+    border-radius: var(--radius-m);
+    display: flex;
+    flex-direction: column;
+    gap: var(--pad-s);
+    cursor: grab;
+}
+
+section .task-col .task button {
+    align-self: flex-end;
+    cursor: pointer;
+    padding: var(--pad-s) var(--pad-m);
+    border-radius: var(--radius-s);
+    border: none;
+    background-color: var(--del-btn-color);
+    color: var(--txt-color);
+}
+
+.modal{
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    top: 0;
+    left: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal.active{
+    display: flex;
+}
+
+.modal .bg{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+}
+
+.modal .center{
+    background-color: var(--bg-btn-color);
+    padding: var(--pad-l);
+    border-radius: var(--radius-l);
+    display: flex;
+    flex-direction: column;
+    gap: var(--pad-m);
+    z-index: 10;
+    width: 50vw;
+}
+
+.modal .center input,.modal .center textarea,.modal .center button{
+    padding: var(--pad-m) var(--pad-l);
+    color: var(--txt-color);
+    border-radius: var(--radius-m);
+    border: none;
+    background-color: var(--bg-task-color);
+}
+
+.modal .center button{
+    background-color: var(--add-btn-color);
+    color: var(--txt-color);
+    cursor: pointer;
+    width: fit-content;
+    align-self: center;
+}
+

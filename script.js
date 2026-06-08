@@ -1,0 +1,118 @@
+let tasksData = {};
+
+const todo = document.querySelector("#todo");
+const progress = document.querySelector("#progress");
+const done = document.querySelector("#done");
+const columns = [todo, progress, done];
+let draggedTask = null;
+const tasks = document.querySelectorAll(".task");
+
+function addTask(title,desc,col){
+    const div = document.createElement("div");
+    div.classList.add("task");
+    div.setAttribute("draggable", "true");
+    div.innerHTML = `
+    <h2>${title}</h2>
+    <p>${desc}</p>
+    <button>Delete</button>`;
+
+    col.appendChild(div);
+
+    div.addEventListener("drag", () => {
+      draggedTask = div;
+    });
+
+    const deleteBtn = div.querySelector("button");
+    deleteBtn.addEventListener("click", () => {
+      div.remove();
+      updateTaskCount();
+    });
+    return div;
+}
+
+function updateTaskCount() {
+  columns.forEach((col) => {
+      const tasks = col.querySelectorAll(".task");
+      const count = col.querySelector(".right");
+      tasksData[col.id] = Array.from(tasks).map((t) => {
+        return {
+          title: t.querySelector("h2").innerText,
+          desc: t.querySelector("p").innerText,
+        };
+      });
+
+      localStorage.setItem("tasks", JSON.stringify(tasksData));
+      count.innerText = tasks.length;
+    });
+  }
+
+if (localStorage.getItem("tasks")) {
+  const data = JSON.parse(localStorage.getItem("tasks"));
+  for (let col in data) {
+    const column = document.querySelector(`#${col}`);
+    data[col].forEach((task) => {
+      addTask(task.title, task.desc, column);
+    });
+  }
+  updateTaskCount();
+}
+
+tasks.forEach((task) => {
+  task.addEventListener("drag", () => {
+    draggedTask = task;
+  });
+});
+
+function addDragEvents(column) {
+  column.addEventListener("dragenter", (e) => {
+    e.preventDefault();
+    column.classList.add("hover-over");
+  });
+  column.addEventListener("dragleave", (e) => {
+    e.preventDefault();
+    column.classList.remove("hover-over");
+  });
+
+  column.addEventListener("dragover", (e) => {
+    e.preventDefault();
+  });
+
+  column.addEventListener("drop", (e) => {
+    e.preventDefault();
+
+    column.appendChild(draggedTask);
+    column.classList.remove("hover-over");
+
+    updateTaskCount();
+
+    });
+    updateTaskCount();
+  }
+
+addDragEvents(todo);
+addDragEvents(progress);
+addDragEvents(done);
+
+const toggleModalBtn = document.querySelector("#toggle-modal");
+const modalBg = document.querySelector(".modal .bg");
+const modal = document.querySelector(".modal");
+const addTaskbtn = document.querySelector("#add-new-task");
+
+modalBg.addEventListener("click", () => {
+  modal.classList.remove("active");
+});
+
+toggleModalBtn.addEventListener("click", () => {
+  modal.classList.toggle("active");
+});
+
+addTaskbtn.addEventListener("click", () => {
+  const taskTitle = document.querySelector("#task-title").value;
+  const taskDesc = document.querySelector("#task-desc").value;
+  addTask(taskTitle, taskDesc, todo);
+  updateTaskCount();
+  modal.classList.remove("active");
+
+  document.querySelector("#task-title").value = "";
+  document.querySelector("#task-desc").value = "";
+});
